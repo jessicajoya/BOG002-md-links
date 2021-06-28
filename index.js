@@ -11,11 +11,19 @@ const fs = require('fs')
 const currentPath = process.cwd();
 console.log(currentPath)
 
-//paso dos obtener el directoria del 
+////// paso dos obtener el directoria del 
 const directories = path.dirname(currentPath);
 console.log(directories)
 
-
+var dirPath = path.resolve(__dirname); // path to your directory goes here
+console.log(dirPath)
+var filesList;
+fs.readdir(dirPath, function(err, files){
+  filesList = files.filter(function(e){
+    return path.extname(e).toLowerCase() === '.md'
+  });
+  console.log(filesList);
+});
 /*
 // var dirname =__dirname;
 // Prints: /Users/mjr
@@ -30,7 +38,7 @@ console.log(scriptName);*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////leer los archivos del directorio
 
-// fs.readdir('.', (error,files) =>{
+// fs.readdir(currentPath, (error,files) =>{
 //   if(error){
 //     throw error;
 //   }
@@ -40,6 +48,8 @@ console.log(scriptName);*/
 //   console.log(typeof(arrFiles))
 //   console.log(files.length);
 // });
+
+
 // fs.readdir(directories, (error,files) =>{
 //     if(error){
 //       throw error;
