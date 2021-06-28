@@ -8,58 +8,43 @@ const fs = require('fs')
 
 //paso 1 obtener el path en el que estoy ubicado
 
-const currentPath = process.cwd();
-console.log(currentPath)
+// const currentPath = process.cwd();
+// console.log(currentPath)
 
 ////// paso dos obtener el directoria del 
-const directories = path.dirname(currentPath);
-console.log(directories)
+// const directories = path.dirname(currentPath);
+// console.log(directories)
+const dirPath = path.resolve(__dirname); // path to your directory goes here
 
-var dirPath = path.resolve(__dirname); // path to your directory goes here
-console.log(dirPath)
-var filesList;
+const arrFilesMd = (dirPath)=>{
+
+let filesList;
 fs.readdir(dirPath, function(err, files){
   filesList = files.filter(function(e){
     return path.extname(e).toLowerCase() === '.md'
   });
   console.log(filesList);
 });
-/*
-// var dirname =__dirname;
-// Prints: /Users/mjr
-var filename = (path.dirname(__filename));
-// var directories = path.dirname(currentPath);
-// console.log(current);
-// console.log(dirname)
-console.log(filename)
-// console.log(directories);
-var scriptName = path.basename(__filename)
-console.log(scriptName);*/
 
-/////////////////////////////////////////////////////////////////////////////////////////////leer los archivos del directorio
+}
 
-// fs.readdir(currentPath, (error,files) =>{
-//   if(error){
-//     throw error;
+arrFilesMd(dirPath);
+
+// function is_dir(path) {
+//   try {
+//       var stat = fs.lstatSync(path);
+//       console.log("es un directorio")
+//       // console.log(stat);
+
+//       return stat.isDirectory();
+//   } 
+//   catch (e) {
+//       // lstatSync throws an error if path doesn't exist
+//       console.log("error")
+//       return false;
 //   }
-//   const arrFiles = {files}
-//   console.log((arrFiles))
-//   // console.log((files))
-//   console.log(typeof(arrFiles))
-//   console.log(files.length);
-// });
-
-
-// fs.readdir(directories, (error,files) =>{
-//     if(error){
-//       throw error;
-//     }
-//     const arrFiles = {files}
-//     console.log((arrFiles))
-//     // console.log((files))
-//     console.log(typeof(arrFiles))
-//     console.log(files.length);
-//   });
+// }
+// is_dir('fdaawfwe');
 
 //////////////////////////////////////////////////////////////////////////////////////////////leer el archivo indicado
 
@@ -86,39 +71,6 @@ console.log(scriptName);*/
 
 // })
 
-/////////////////////////////////////////////////////////////////////////////////////////prueba del matchall
 
-// const regexp = /t(e)(st(\d?))/g;
-// const str = 'test1test2';
-
-// const array = [...str.matchAll(regexp)];
-
-// console.log(array[0]);
-
-
-// const impares = ['A','B','CA','D'];
-// console.log(impares);
-// impares.forEach(function(item){
-//   // console.log(item*2)
-// })
-
-// impares.forEach((item)=>{
-//   // console.log(item*2)
-// })
-
-// const multilplicadoPorDos = impares.map(item=>item*2)
-// console.log(multilplicadoPorDos);
-
-// const mayoresAtres = impares.filter(item=>item>3)
-// console.log(mayoresAtres);
-
-// const igualASiete = impares.find(item=>item='B');
-// console.log(igualASiete);
-
-
-
-// // console.log("Hola a Todas")
-
-//ANTHE
 
                      
