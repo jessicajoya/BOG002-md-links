@@ -18,12 +18,11 @@ const dirPath = path.resolve(__dirname); // path to your directory goes here
 
 const arrFilesMd = (dirPath)=>{
 
-let filesList;
+let mdFilesList;
+
 fs.readdir(dirPath, function(err, files){
-  filesList = files.filter(function(e){
-    return path.extname(e).toLowerCase() === '.md'
-  });
-  console.log(filesList);
+mdFilesList = files.filter(function(e){return path.extname(e).toLowerCase() === '.md'});
+  console.log(mdFilesList);
 });
 
 }
