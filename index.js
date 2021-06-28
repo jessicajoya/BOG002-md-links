@@ -1,12 +1,36 @@
 // module.exports = () => {
 //   // ...
 // };
-
+const path = require('path');
 const fs = require('fs')
+
+
+
+//paso 1 obtener el path en el que estoy ubicado
+
+const currentPath = process.cwd();
+console.log(currentPath)
+
+//paso dos obtener el directoria del 
+const directories = path.dirname(currentPath);
+console.log(directories)
+
+
+/*
+// var dirname =__dirname;
+// Prints: /Users/mjr
+var filename = (path.dirname(__filename));
+// var directories = path.dirname(currentPath);
+// console.log(current);
+// console.log(dirname)
+console.log(filename)
+// console.log(directories);
+var scriptName = path.basename(__filename)
+console.log(scriptName);*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////leer los archivos del directorio
 
-// fs.readdir('./', (error,files) =>{
+// fs.readdir('.', (error,files) =>{
 //   if(error){
 //     throw error;
 //   }
@@ -16,32 +40,41 @@ const fs = require('fs')
 //   console.log(typeof(arrFiles))
 //   console.log(files.length);
 // });
+// fs.readdir(directories, (error,files) =>{
+//     if(error){
+//       throw error;
+//     }
+//     const arrFiles = {files}
+//     console.log((arrFiles))
+//     // console.log((files))
+//     console.log(typeof(arrFiles))
+//     console.log(files.length);
+//   });
 
 //////////////////////////////////////////////////////////////////////////////////////////////leer el archivo indicado
 
-fs.readFile('./README.md', 'utf8' , (err, data) => {
-  // fs.readFile('./package.json', 'utf8' , (err, data) => {
-  if (err) {
-    console.error(err)
-    return
-  }
-  console.log(typeof(data))
-  const expRegLinks = /\((http.*?)\)/gm;
-//   const expRegLinks = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/;
-//   const expRegLinks =/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
-//   const expRegLinks ='/mdLinks/i'
-  const str = data;
-//   const array = [...str.matchAll(expRegLinks)];
-    const array = [...str.match(expRegLinks)];
-  console.log(array.length);
-console.log(array);
+// fs.readFile('./README.md', 'utf8' , (err, data) => {
+//   // fs.readFile('./package.json', 'utf8' , (err, data) => {
+//   if (err) {
+//     console.error(err)
+//     return
+//   }
+//   console.log(typeof(data))
+
+//  const expRegLinks =/(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
+
+//   const str = data;
+
+// const array = [...str.match(expRegLinks)];
+// console.log(array.length);
+// console.log(array);
   
-////////////////////////////////////////search me regresa la coincidencia
+////////////////////////////////////////search me regresa la posicion de coincidencia
 //   const search= str.search(expRegLinks);
 //   console.log(search);
 
 
-})
+// })
 
 /////////////////////////////////////////////////////////////////////////////////////////prueba del matchall
 
@@ -76,19 +109,6 @@ console.log(array);
 
 // // console.log("Hola a Todas")
 
+//ANTHE
 
-// // readFile('C:/Usersusr/Documents/JESS LABORATORIA/MDLINKS/BOG002-md-links/README:md', (err, data) => {
-
-// //   if (err) throw err;
-// //   console.log(data);
-// // });
-// // import { readFile } from 'BOG002-md-links';
-
-// // const readFile('/etc/passwd', (err, data) => {
-// //   if (err) throw err;
-// //   console.log(data);
-// // }
-
-// let text = "Visit W3Schools!"; 
-// let n = text.search(/w3Schools/i);
-// console.log(n);
+                     
