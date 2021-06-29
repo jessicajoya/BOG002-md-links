@@ -16,18 +16,21 @@ const fs = require('fs')
 // console.log(directories)
 const dirPath = path.resolve(__dirname); // path to your directory goes here
 
-const arrFilesMd = (dirPath)=>{
+const extFileMD=(e)=>{return path.extname(e).toLowerCase() === '.md'}
+
+const arrFilesMd = (dirPath,callback)=>{
 
 let mdFilesList;
 
-fs.readdir(dirPath, function(err, files){
-mdFilesList = files.filter(function(e){return path.extname(e).toLowerCase() === '.md'});
+return fs.readdir(dirPath, function(err, files){ 
+  mdFilesList = files.filter(callback);
+
   console.log(mdFilesList);
 });
 
 }
 
-arrFilesMd(dirPath);
+arrFilesMd(dirPath,extFileMD);
 
 // function is_dir(path) {
 //   try {
