@@ -8,19 +8,41 @@ const findFilesMd = (inputPath) => {
     let files = fs.readdirSync(inputPath);
     const extFileMD = (file) => { return path.extname(file).toLowerCase() === '.md' }
     const mdFilesList = files.filter(extFileMD);
-
+    // console.log(mdFilesList)
     return mdFilesList
 }
-
 const arrFilesMD = findFilesMd(dirPath)
+console.log(arrFilesMD)
 
+
+
+// const fileOrDir = (path) => {
+
+//     fs.stat(path, (err, stats) => {
+
+//         if (err) {
+//             console.log('el path ingresado es incorrecto');
+//         }
+
+//         else if (stats.isFile() === 'true') {
+//             console.log('es un file');
+//         }
+//         else if (stats.isDirectory() === 'true') {
+//             console.log('es un directorio?');
+//              const arrFilesMD = findFilesMd(dirPath)
+//              console.log(arrFilesMD)
+//             return fileOrDir();
+//         }
+//     });
+//     console.log(fileOrDir(dirPath))
+// };
+
+
+////////////////Funcion para crear el objeto 
 
 const findLinks = (filesMD) => {
-
     let contentFile = fs.readFileSync(filesMD, 'utf-8')
-
     const expRegLinks = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
-
 
     const listLinks = [...contentFile.match(expRegLinks)];//recorrerlo map retund listlinks.map(){retorno el objeto}
     // console.log(listLinks)
@@ -31,8 +53,6 @@ const findLinks = (filesMD) => {
         let sliceIndice = contentFile.substr(0, indice);
         let indiceApertura = sliceIndice.lastIndexOf("[") + 1;
         let indicecierre = sliceIndice.lastIndexOf("]");
-        // console.log(sliceIndice)
-        // console.log(indice)
 
         let objectlink =
         {
@@ -46,13 +66,10 @@ const findLinks = (filesMD) => {
 
 }
 
-
-
 const arrayLinks = arrFilesMD.flatMap(md => findLinks(md));
-console.log(arrayLinks)
+// console.log(arrayLinks)
 
-// let mdLinks = [];
-// mdLinks.push(arrFilesMD.map(md=>findLinks(md)))
-// console.log(mdLinks)
-
+let mdLinks = [];
+mdLinks.push(arrFilesMD.map(md=>findLinks(md)))
+console.log(mdLinks)
 
