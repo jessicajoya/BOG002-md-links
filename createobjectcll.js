@@ -1,19 +1,48 @@
-// const path = require('path');
-// const fs = require('fs')
+const path = require('path');
+const fs = require('fs')
 
-// const dirPath = path.resolve(__dirname); // encuentro el path actual
+const dirPath = path.resolve(__dirname); // encuentro el path actual
+// console.log(dirPath)
 
-// const findFilesMd = (inputPath) => {
+const findFilesMd = (inputPath) => {
+  let files = fs.readdirSync(inputPath);
+  const extFileMD = (file) => { return path.extname(file).toLowerCase() === '.md' }
+  const mdFilesList = files.filter(extFileMD);
+  return mdFilesList
+}
+// const arrFilesMD = findFilesMd(arrFinal)
+// console.log(arrFilesMD)
 
-//   let files = fs.readdirSync(inputPath);
-//   const extFileMD = (file) => { return path.extname(file).toLowerCase() === '.md' }
-//   const mdFilesList = files.filter(extFileMD);
-//   // console.log(mdFilesList)
-//   return mdFilesList
-// }
-// const arrFilesMD = findFilesMd(dirPath)
-// // console.log(arrFilesMD)
-// //////////////////////////////////////////////////////////////////////////////////////////////leer el archivo indicado
+
+////////////////////////////////////////////////////////////////https://www.geeksforgeeks.org/node-js-fs-readdir-method/
+const listFilesDir = (inputpath,arr) => {
+  
+  fs.readdirSync(inputpath).map(element => {
+    if (fs.lstatSync(path.resolve(inputpath, element)).isDirectory()) {
+    // // let listFiles = " "
+    // let listFiles=
+     console.log(element);
+      arr.push('Directory: ' + element)
+      // listFilesDir("\'"+element+"\'",arr)
+      // listFilesDir(`${element}`,arr)
+      // listFilesDir('prueba',arr)
+     
+    
+    } else {
+      arr.push(element)
+      }
+    });
+  return arr
+// 
+}
+
+let arrFinal = listFilesDir(dirPath,[])
+console.log(arrFinal)
+
+
+
+//   .then((data) => { console.log(data) })
+//////////////////////////////////////////////////////////////////////////////////////////////leer el archivo indicado
 // const leerMD = (ruta) => {
 //   //creando una instancia 
 //   return new Promise((resolve, reject) => {
@@ -50,96 +79,8 @@
 
 // }
 
-// // consuminla promesa con .then
-// // leerMD('README.md')
-// // .then((data)=>{console.log(data)})
+// consuminla promesa con .then
+// leerMD('README.md')
+//   .then((data) => { console.log(data) })
 
 
-// const fileOrDir = (path) => {
-
-//   fs.stat('dddddddddd', (err, stats) => {
-
-//     if (err) {
-//       console.log('el path ingresado es incorrecto');
-//     }
-
-//     else if (stats.isFile() === 'true') {
-
-//       console.log('es un file');
-//     }
-//     else if (stats.isDirectory() === 'true') {
-//       console.log('es un directorio?');
-//       //  const arrFilesMD = findFilesMd(dirPath)
-//       //  console.log(arrFilesMD)
-//       // return fileOrDir();
-//     }
-//   });
-//   // console.log(fileOrDir(dirPath))
-// };
-// let esNum = numero=>(Array.isArray(arrnums)===false)
-const arrnums = [1,[2,3,4,[5,6],7],8,9,[10,11]]
-// console.log(arrnums.length)
-// console.log(arrnums[2])
-// console.log(arrnums[2][2])
-// console.log(arrnums[2][2][0])
-
-// const recNums=(arr,i,objeto)=>{
-//     // console.log(arr[i]);
-   
-//     const objetoInterno={...objeto,[i]:Array.isArray(arr[i])}
-//     i++;
-//     if(i<=arr.length){
-//      return recNums(arr,i,objetoInterno)
-//     }
-//     return objeto;
-//   }
-  
-//   const newobject = recNums(arrnums,0,{});
-// console.log(newobject)
-
-
-
-// console.log(Array.isArray(arrnums))
-// if(arrnums==='true'){
-//   const recNumspor = arrtodosnums(arrnums,0,[]);
-// }
-// else{
-//   console.log('es un numero')
-// }
-
-// 
-
-// const recNumspor = arrtodosnums(arrnums,0,[]);
-// console.log(recNumspor)
-
-
-
-//Array.isArray(arrnums) para revisar
-// const recNums=(arr,i,objeto)=>{
-//   // console.log(arr[i]);
- 
-//   const objetoInterno={...objeto,[i]:arr[i]}
-//   i++;
-//   if(i<=arr.length){
-//    return recNums(arr,i,objetoInterno)
-//   }
-//   return objeto;
-// }
-
-// const newobject = recNums(arrnums,0,{});
-// console.log(newobject)
-
-// const recNumspor2=(arr,i,array)=>{
-//   // console.log(arr[i]);
-//   // array.push(arr[i]*2)
-//   const arrnums = [...array,arr[i]*2];
-
-//   i++;
-//   if(i<arr.length){
-//    return recNumspor2(arr,i,arrnums)
-//   }
-//   return arrnums;
-// }
-
-// const recNumspor = recNumspor2(arrnums,0,[]);
-// console.log(recNumspor)
