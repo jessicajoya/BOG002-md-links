@@ -4,45 +4,25 @@ const fs = require('fs')
 const dirPath = path.resolve(__dirname); // encuentro el path actual
 // console.log(dirPath)
 
-const findFilesMd = (inputPath) => {
-  let files = fs.readdirSync(inputPath);
-  const extFileMD = (file) => { return path.extname(file).toLowerCase() === '.md' }
-  const mdFilesList = files.filter(extFileMD);
-  return mdFilesList
-}
-// const arrFilesMD = findFilesMd(arrFinal)
-// console.log(arrFilesMD)
+const extFileMD = (file) => { return path.extname(file).toLowerCase() === '.md' }
 
 
-////////////////////////////////////////////////////////////////https://www.geeksforgeeks.org/node-js-fs-readdir-method/
-const listFilesDir = (inputpath,arr) => {
-  
+const listFilesIntoDirectory = (inputpath, arr) => {
+  arr = arr || [];
   fs.readdirSync(inputpath).map(element => {
-    if (fs.lstatSync(path.resolve(inputpath, element)).isDirectory()) {
-    // // let listFiles = " "
-    // let listFiles=
-     console.log(element);
-      arr.push('Directory: ' + element)
-      // listFilesDir("\'"+element+"\'",arr)
-      // listFilesDir(`${element}`,arr)
-      // listFilesDir('prueba',arr)
-     
-    
+    if (fs.lstatSync(path.resolve(inputpath, element)).isDirectory() && !element.startsWith('.') ) {
+
+   
+        listFilesIntoDirectory(element, arr)
+      
     } else {
       arr.push(element)
-      }
-    });
-  return arr
-// 
+    }
+  });
+  return arr.filter(extFileMD);
 }
-
-let arrFinal = listFilesDir(dirPath,[])
-console.log(arrFinal)
-
-
-
-//   .then((data) => { console.log(data) })
-//////////////////////////////////////////////////////////////////////////////////////////////leer el archivo indicado
+console.log(listFilesIntoDirectory(dirPath))
+//////////////////////////////////////////////////////////////////////////////////////////leer el archivo indicado
 // const leerMD = (ruta) => {
 //   //creando una instancia 
 //   return new Promise((resolve, reject) => {
@@ -79,8 +59,13 @@ console.log(arrFinal)
 
 // }
 
-// consuminla promesa con .then
 // leerMD('README.md')
-//   .then((data) => { console.log(data) })
+// .then(console.log) 
 
 
+// let arrFinal = listFilesIntoDirectory(dirPath)
+// const arrPromise = arrFinal.map(leerMD)
+// Promise.all(arrPromise)
+// .then(console.log)
+
+// console.log(path.resolve('/readme3.md'));
