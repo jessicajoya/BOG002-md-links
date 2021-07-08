@@ -20,7 +20,7 @@ const listFilesIntoDirectory = (inputpath, arr) => {
       console.log(element)
       // extFileMD(element)
       
-      // arr.push(element)
+      arr.push(element)
     }
   });
   return arr;
@@ -63,8 +63,9 @@ const leerMD = (ruta) => {
 
 }
 
+let objectfinal =[]
 let arrFinal = listFilesIntoDirectory(dirPath)
-// const arrPromise = arrFinal.map(leerMD)
-// Promise.all(arrPromise)
-//   .then(console.log)
-// console.log(arrFinal)
+const arrPromise = arrFinal.map(leerMD)
+ Promise.all(arrPromise)
+.then(console.log)
+// console.log(arrPromise);
