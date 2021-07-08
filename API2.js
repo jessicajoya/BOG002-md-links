@@ -67,9 +67,9 @@ const findLinks = (filesMD) => {
 }
 
 const arrayLinks = arrFilesMD.flatMap(md => findLinks(md));
-// console.log(arrayLinks)
+console.log(arrayLinks)
 
-let mdLinks = [];
-mdLinks.push(arrFilesMD.map(md=>findLinks(md)))
-console.log(mdLinks)
+// let mdLinks = [];
+// mdLinks.push(arrFilesMD.map(md=>findLinks(md)))
+// console.log(mdLinks)
 
