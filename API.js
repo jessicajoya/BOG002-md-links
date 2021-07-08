@@ -15,32 +15,6 @@ const arrFilesMD = findFilesMd(dirPath)
 console.log(arrFilesMD)
 
 
-<<<<<<< HEAD
-=======
-
-// const fileOrDir = (path) => {
-
-//     fs.stat(path, (err, stats) => {
-
-//         if (err) {
-//             console.log('el path ingresado es incorrecto');
-//         }
-
-//         else if (stats.isFile() === 'true') {
-//             console.log('es un file');
-//         }
-//         else if (stats.isDirectory() === 'true') {
-//             console.log('es un directorio?');
-//              const arrFilesMD = findFilesMd(dirPath)
-//              console.log(arrFilesMD)
-//             return fileOrDir();
-//         }
-//     });
-//     console.log(fileOrDir(dirPath))
-// };
-
-
->>>>>>> 8ea143b9bac684b588cbb42a892bcec98ef3e801
 ////////////////Funcion para crear el objeto 
 
 const findLinks = (filesMD) => {
