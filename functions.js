@@ -23,6 +23,18 @@ const listFilesIntoDirectory = (inputpath, arr) => {
 }
 
 
+const findLinks = (filesMD) => {
+  let contentFile = fs.readFileSync(filesMD, 'utf-8')
+  const expRegLinks = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
+
+  const listLinks = [...contentFile.match(expRegLinks)];//recorrerlo map retund listlinks.map(){retorno el objeto}
+  const objetoAPI = createAPI(listLinks,filesMD,contentFile)
+ return objetoAPI 
+}
+
+
+
+
 const leerMD = (ruta) => {
   //creando una instancia 
   return new Promise((resolve, reject) => {
@@ -34,23 +46,7 @@ const leerMD = (ruta) => {
       
       const expRegLinks = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
       const listLinks = [...data.match(expRegLinks)];//recorrerlo map retund listlinks.map(){retorno el objeto}
-     
-      let objectlinks = [];
-      for (let i = 0; i < listLinks.length; i++) {
-        let indice = data.indexOf(listLinks[i])
-        let sliceIndice = data.substr(0, indice);
-        let indiceApertura = sliceIndice.lastIndexOf("[") + 1;
-        let indicecierre = sliceIndice.lastIndexOf("]");
-        let objectlink =
-        {
-          link: listLinks[i],
-          href: ruta,
-          text: data.substring(indiceApertura, indicecierre)
-        }
-        objectlinks.push(objectlink)
-      }
-      console.log(objectlinks.href)
-      resolve(objectlinks)
+      resolve(listLinks)
     })
   })
 }

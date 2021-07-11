@@ -1,19 +1,49 @@
 const path = require('path');
 const fs = require('fs')
+const axios = require('axios');
 
 const dirPath = path.resolve(__dirname); // encuentro el path actual
+console.log(dirPath)
 
-const findFilesMd = (inputPath) => {
+const extFileMD = (file) => { return path.extname(file).toLowerCase() === '.md' }
 
-    let files = fs.readdirSync(inputPath);
-    const extFileMD = (file) => { return path.extname(file).toLowerCase() === '.md' }
-    const mdFilesList = files.filter(extFileMD);
-    // console.log(mdFilesList)
-    return mdFilesList
+const listFilesIntoDirectory = (inputpath, arr) => {
+  arr = arr || [];
+  fs.readdirSync(inputpath).map(element => {
+    if (fs.lstatSync(path.resolve(inputpath, element)).isDirectory()) {
+      if (!element.startsWith('.git') && !element.includes('modules')) {
+        // console.log(element + "dir")
+        listFilesIntoDirectory(element, arr)
+      }
+    } else if (element.includes('.md')) {
+      console.log(element)
+      // extFileMD(element)
+      arr.push(element)
+    }
+  });
+  return arr;
 }
-const arrFilesMD = findFilesMd(dirPath)
-console.log(arrFilesMD)
 
+
+const createAPI = (inputlist,pathName,contentFile) =>{
+    let objectlinks = [];
+    for (let i = 0; i < inputlist.length; i++) {
+
+        let indice = contentFile.indexOf(inputlist[i])
+        let sliceIndice = contentFile.substr(0, indice);
+        let indiceApertura = sliceIndice.lastIndexOf("[") + 1;
+        let indicecierre = sliceIndice.lastIndexOf("]");
+
+        let objectlink =
+        {
+            link: inputlist[i],
+            href: pathName,
+            text: contentFile.substring(indiceApertura, indicecierre)
+        }
+        objectlinks.push(objectlink)
+    }
+    return objectlinks;
+}
 
 ////////////////Funcion para crear el objeto 
 
@@ -23,30 +53,23 @@ const findLinks = (filesMD) => {
 
     const listLinks = [...contentFile.match(expRegLinks)];//recorrerlo map retund listlinks.map(){retorno el objeto}
     // console.log(listLinks)
-    let objectlinks = [];
-    for (let i = 0; i < listLinks.length; i++) {
-
-        let indice = contentFile.indexOf(listLinks[i])
-        let sliceIndice = contentFile.substr(0, indice);
-        let indiceApertura = sliceIndice.lastIndexOf("[") + 1;
-        let indicecierre = sliceIndice.lastIndexOf("]");
-
-        let objectlink =
-        {
-            link: listLinks[i],
-            href: filesMD,
-            text: contentFile.substring(indiceApertura, indicecierre)
-        }
-        objectlinks.push(objectlink)
-    }
-    return objectlinks;
-
+    const objetoAPI = createAPI(listLinks,filesMD,contentFile)
+   return objetoAPI 
 }
 
-const arrayLinks = arrFilesMD.flatMap(md => findLinks(md));
+const arrayLinks = listFilesIntoDirectory(dirPath).flatMap(md => findLinks(md));
 console.log(arrayLinks)
+console.log(findLinks())
 
-// let mdLinks = [];
-// mdLinks.push(arrFilesMD.map(md=>findLinks(md)))
-// console.log(mdLinks)
 
+
+// const verificarStatus = (link)=>{
+//   axios
+//   .get(link)
+//   .then((response) => {
+//     console.log(response.status);
+//   })
+//   .catch((error) => {
+//     console.error('error');
+//   });
+// }
