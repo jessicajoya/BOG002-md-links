@@ -57,7 +57,7 @@ const leerMD = (ruta) => {
 }
 
 let arrFinal = listFilesIntoDirectory(dirPath)
-const arrPromise = arrFinal.map(leerMD)
+const arrPromise = arrFinal.flatMap(leerMD)
 Promise.all(arrPromise)
 .then(console.log)
 

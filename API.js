@@ -1,12 +1,12 @@
 const path = require('path');
 const fs = require('fs');
-const fetch = require("node-fetch");
+// const fetch = require("node-fetch");
 const axios = require('axios');
 
 
 
 const dirPath = path.resolve(__dirname); // encuentro el path actual
-console.log(dirPath)
+
 
 const extFileMD = (file) => { return path.extname(file).toLowerCase() === '.md' }
 
@@ -14,89 +14,93 @@ const listFilesIntoDirectory = (inputpath, arr) => {
   arr = arr || [];
   fs.readdirSync(inputpath).map(element => {
     if (fs.lstatSync(path.resolve(inputpath, element)).isDirectory()) {
-      if (!element.startsWith('.git') && !element.includes('modules')) {
-        // console.log(element + "dir")
+      if (!element.startsWith('.') && !element.includes('modules')) {
         listFilesIntoDirectory(element, arr)
       }
-    } else if (element.includes('.md')) {
-      // console.log(element)
-      // extFileMD(element)
-      arr.push(element)
+    } else if (fs.lstatSync(path.resolve(inputpath, element)).isFile()) {
+      arr.push(inputpath + '//' + element)
     }
   });
-  return arr;
+  return arr.filter(extFileMD);
 }
 
 
-const createAPI = (inputlist,pathName,contentFile) =>{
-    let objectlinks = []
-  ;
-    for (let i = 0; i < inputlist.length; i++) {
+const createAPI = (inputlist, pathName, contentFile) => {
+  let objectlinks = []
+    ;
+  for (let i = 0; i < inputlist.length; i++) {
 
-        let indice = contentFile.indexOf(inputlist[i])
-        let sliceIndice = contentFile.substr(0, indice);
-        let indiceApertura = sliceIndice.lastIndexOf("[") + 1;
-        let indicecierre = sliceIndice.lastIndexOf("]");
+    let indice = contentFile.indexOf(inputlist[i])
+    let sliceIndice = contentFile.substr(0, indice);
+    let indiceApertura = sliceIndice.lastIndexOf("[") + 1;
+    let indicecierre = sliceIndice.lastIndexOf("]");
 
-        let objectlink =
-        {
-            link: inputlist[i],
-            href: pathName,
-            text: contentFile.substring(indiceApertura, indicecierre)
-        }
-        objectlinks.push(objectlink)
+    let objectlink =
+    {
+      href: inputlist[i],
+      text: contentFile.substring(indiceApertura, indicecierre),
+      file: pathName
     }
-    return objectlinks;
+    objectlinks.push(objectlink)
+  }
+  return objectlinks;
 }
 
-// ////////////////Funcion para crear el objeto 
 
 const findLinks = (filesMD) => {
-    let contentFile = fs.readFileSync(filesMD, 'utf-8')
-    const expRegLinks = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
+  let contentFile = fs.readFileSync(filesMD, 'utf-8')
+  const expRegLinks = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
 
-    const listLinks = [...contentFile.match(expRegLinks)];//recorrerlo map retund listlinks.map(){retorno el objeto}
-    // console.log(listLinks)
-    const objetoAPI = createAPI(listLinks,filesMD,contentFile)
-   return objetoAPI
+  const listLinks = [...contentFile.match(expRegLinks)];//recorrerlo map retund listlinks.map(){retorno el objeto}
+
+  const objetoAPI = createAPI(listLinks, filesMD, contentFile)
+  return objetoAPI
 }
 
 
 const arrayFilesMd = listFilesIntoDirectory(dirPath)
-console.log(arrayFilesMd)
+
+const URLs = arrayFilesMd.flatMap(md => findLinks(md));
 
 
-const URLs= arrayFilesMd.flatMap(md => findLinks(md));
-console.log(URLs)
 
+var task_href = [];
 
-var task_href= [];
- 
 URLs.forEach(function (URLs) {
- 
+
   task_href.push(URLs.link);
-     
+
 });
 
 console.log(task_href)
 
 
-function getAllData(task_href){
+function getAllData(task_href) {
   return Promise.all(task_href.map(fetchData));
 }
 
 function fetchData(URL) {
   return axios
     .get(URL)
-    .then(function(response) {
+    .then(function (response) {
       return {
-        status: true,
-        // data: response.data
+        status: response.status,
+        statustext: response.statusText
       };
     })
-    .catch(function(error) {
-      return { status: false };
+    .catch(function (error) {
+      if (error.response) {
+        return {
+          status: error.response.status,
+          statustext: "fail"
+        };
+      } else {
+        return {
+          status: "fail",
+          statustext: "fail"
+        }
+      };
     });
 }
 
-getAllData(task_href).then(resp=>{console.log(resp)}).catch(e=>{console.log(e)})
+getAllData(task_href).then(console.log).catch(console.log)
