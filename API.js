@@ -1,12 +1,8 @@
 const path = require('path');
 const fs = require('fs');
-// const fetch = require("node-fetch");
 const axios = require('axios');
 
-
-
-const dirPath = path.resolve(__dirname); // encuentro el path actual
-
+const dirPath = path.resolve(__dirname); 
 
 const extFileMD = (file) => { return path.extname(file).toLowerCase() === '.md' }
 
@@ -24,7 +20,6 @@ const listFilesIntoDirectory = (inputpath, arr) => {
   return arr.filter(extFileMD);
 }
 
-
 const createAPI = (inputlist, pathName, contentFile) => {
   let objectlinks = []
     ;
@@ -40,6 +35,8 @@ const createAPI = (inputlist, pathName, contentFile) => {
       href: inputlist[i],
       text: contentFile.substring(indiceApertura, indicecierre),
       file: pathName
+      
+      
     }
     objectlinks.push(objectlink)
   }
@@ -50,11 +47,9 @@ const createAPI = (inputlist, pathName, contentFile) => {
 const findLinks = (filesMD) => {
   let contentFile = fs.readFileSync(filesMD, 'utf-8')
   const expRegLinks = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
-
-  const listLinks = [...contentFile.match(expRegLinks)];//recorrerlo map retund listlinks.map(){retorno el objeto}
-
+  const listLinks = [...contentFile.match(expRegLinks)];
   const objetoAPI = createAPI(listLinks, filesMD, contentFile)
-  return objetoAPI
+  return listLinks
 }
 
 
@@ -63,23 +58,9 @@ const arrayFilesMd = listFilesIntoDirectory(dirPath)
 const URLs = arrayFilesMd.flatMap(md => findLinks(md));
 
 
+const getAllData = (list_href) => {return Promise.all(list_href.map(statusLinks));}
 
-var task_href = [];
-
-URLs.forEach(function (URLs) {
-
-  task_href.push(URLs.link);
-
-});
-
-console.log(task_href)
-
-
-function getAllData(task_href) {
-  return Promise.all(task_href.map(fetchData));
-}
-
-function fetchData(URL) {
+const statusLinks=(URL) => {
   return axios
     .get(URL)
     .then(function (response) {
@@ -103,4 +84,4 @@ function fetchData(URL) {
     });
 }
 
-getAllData(task_href).then(console.log).catch(console.log)
+getAllData(URLs).then(console.log).catch(console.log)

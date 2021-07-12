@@ -5,23 +5,20 @@ const dirPath = path.resolve(__dirname); // encuentro el path actual
 console.log(dirPath)
 
 const extFileMD = (file) => { return path.extname(file).toLowerCase() === '.md' }
+
 const listFilesIntoDirectory = (inputpath, arr) => {
   arr = arr || [];
   fs.readdirSync(inputpath).map(element => {
     if (fs.lstatSync(path.resolve(inputpath, element)).isDirectory()) {
-      if (!element.startsWith('.git') && !element.includes('modules')) {
-        // console.log(element + "dir")
+      if (!element.startsWith('.') && !element.includes('modules')) {
         listFilesIntoDirectory(element, arr)
       }
-    } else if (element.includes('.md')) {
-      console.log(element)
-      // extFileMD(element)
-      arr.push(element)
+    } else if (fs.lstatSync(path.resolve(inputpath, element)).isFile()) {
+      arr.push(inputpath + '//' + element)
     }
   });
-  return arr;
+  return arr.filter(extFileMD);
 }
-console.log(listFilesIntoDirectory(dirPath))
 
 
 const leerMD = (ruta) => {
