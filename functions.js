@@ -27,7 +27,7 @@ const findLinks = (filesMD) => {
   let contentFile = fs.readFileSync(filesMD, 'utf-8')
   const expRegLinks = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
 
-  const listLinks = [...contentFile.match(expRegLinks)];//recorrerlo map retund listlinks.map(){retorno el objeto}
+  const listLinks = {...contentFile.match(expRegLinks)};//recorrerlo map retund listlinks.map(){retorno el objeto}
   const objetoAPI = createAPI(listLinks,filesMD,contentFile)
  return objetoAPI 
 }
@@ -35,24 +35,35 @@ const findLinks = (filesMD) => {
 
 
 
-const leerMD = (ruta) => {
-  //creando una instancia 
-  return new Promise((resolve, reject) => {
-    fs.readFile(ruta, 'utf8', (err, data) => {
-      if (err) {
-        reject(err)
-        return
-      }
+// const leerMD = (ruta) => {
+//   //creando una instancia 
+//   return new Promise((resolve, reject) => {
+//     fs.readFile(ruta, 'utf8', (err, data) => {
+//       if (err) {
+//         reject(err)
+//         return
+//       }
       
-      const expRegLinks = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
-      const listLinks = [...data.match(expRegLinks)];//recorrerlo map retund listlinks.map(){retorno el objeto}
-      resolve(listLinks)
-    })
-  })
-}
+//       const expRegLinks = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
+//       const listLinks = [...data.match(expRegLinks)];//recorrerlo map retund listlinks.map(){retorno el objeto}
+//       resolve(listLinks)
+//     })
+//   })
+// }
 
-let arrFinal = listFilesIntoDirectory(dirPath)
-const arrPromise = arrFinal.map(leerMD)
-Promise.all(arrPromise)
-.then(console.log)
+let arrFinal = findLinks(dirPath)
+console.log(arrFinal)
+// const urls = arrFinal.flatMap(leerMD)
+// Promise.all(urls)
+// .then(console.log)
 
+
+
+// let requests = urls.map(url => fetch(url));
+// console.log(requests)
+
+// // Promise.all espera hasta que todas la tareas estén resueltas
+// Promise.all(requests)
+//   .then(responses => responses.forEach(
+//     response => console.log(`${response.url}: ${response.status}`)
+//   ));

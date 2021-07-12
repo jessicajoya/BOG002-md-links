@@ -29,7 +29,7 @@ const fetch = require("node-fetch");
 let urls = [
   'https://api.github.com/users/iliakan',
   'https://api.github.com/users/remy',
-  'https://api.github.com/bbbbbbbbbbbbbbbbbbbbsers/jeresig'
+  'htps://api.github.com/bbbbbbbbbbbbbbbbbbbbsers/jeresig'
 ];
 
 // "mapear" cada url a la promesa de su fetch

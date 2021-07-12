@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs')
+// const fetch = require("node-fetch");
 
 const dirPath = path.resolve(__dirname); // encuentro el path actual
 
@@ -73,3 +74,11 @@ console.log(arrayLinks)
 // mdLinks.push(arrFilesMD.map(md=>findLinks(md)))
 // console.log(mdLinks)
 
+// let requests = arrayLinks.map(url => fetch(url));
+// console.log(requests)
+
+// // Promise.all espera hasta que todas la tareas estén resueltas
+// Promise.all(requests)
+//   .then(responses => responses.forEach(
+//     response => console.log(`${response.url}: ${response.status}`)
+//   ));

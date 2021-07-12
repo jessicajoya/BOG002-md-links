@@ -1,5 +1,7 @@
 const path = require('path');
 const fs = require('fs');
+const fetch = require("node-fetch");
+const axios = require('axios');
 
 
 
@@ -56,29 +58,45 @@ const findLinks = (filesMD) => {
     const listLinks = [...contentFile.match(expRegLinks)];//recorrerlo map retund listlinks.map(){retorno el objeto}
     // console.log(listLinks)
     const objetoAPI = createAPI(listLinks,filesMD,contentFile)
-   return objetoAPI 
+   return objetoAPI
 }
 
 
 const arrayFilesMd = listFilesIntoDirectory(dirPath)
-// console.log(arrayFilesMd)
+console.log(arrayFilesMd)
 
 
-const arrayLinks= arrayFilesMd.map(md => findLinks(md));
-console.log(arrayLinks)
+const URLs= arrayFilesMd.flatMap(md => findLinks(md));
+console.log(URLs)
 
 
+var task_href= [];
+ 
+URLs.forEach(function (URLs) {
+ 
+  task_href.push(URLs.link);
+     
+});
+
+console.log(task_href)
 
 
-// // const verificarStatus = (link)=>{
-// //   axios
-// //   .get(link)
-// //   .then((response) => {
-// //     console.log(response.status);
-// //   })
-// //   .catch((error) => {
-// //     console.error('error');
-// //   });
-// // }
+function getAllData(task_href){
+  return Promise.all(task_href.map(fetchData));
+}
 
+function fetchData(URL) {
+  return axios
+    .get(URL)
+    .then(function(response) {
+      return {
+        status: true,
+        // data: response.data
+      };
+    })
+    .catch(function(error) {
+      return { status: false };
+    });
+}
 
+getAllData(task_href).then(resp=>{console.log(resp)}).catch(e=>{console.log(e)})
