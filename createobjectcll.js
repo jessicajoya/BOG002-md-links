@@ -21,42 +21,43 @@ const listFilesIntoDirectory = (inputpath, arr) => {
   });
   return arr;
 }
+console.log(listFilesIntoDirectory(dirPath))
 
 
-const leerMD = (ruta) => {
-  //creando una instancia 
-  return new Promise((resolve, reject) => {
-    fs.readFile(ruta, 'utf8', (err, data) => {
-      if (err) {
-        reject(err)
-        return
-      }
+// const leerMD = (ruta) => {
+//   //creando una instancia 
+//   return new Promise((resolve, reject) => {
+//     fs.readFile(ruta, 'utf8', (err, data) => {
+//       if (err) {
+//         reject(err)
+//         return
+//       }
       
-      const expRegLinks = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
-      const listLinks = [...data.match(expRegLinks)];//recorrerlo map retund listlinks.map(){retorno el objeto}
+//       const expRegLinks = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
+//       const listLinks = [...data.match(expRegLinks)];//recorrerlo map retund listlinks.map(){retorno el objeto}
      
-      let objectlinks = [];
-      for (let i = 0; i < listLinks.length; i++) {
-        let indice = data.indexOf(listLinks[i])
-        let sliceIndice = data.substr(0, indice);
-        let indiceApertura = sliceIndice.lastIndexOf("[") + 1;
-        let indicecierre = sliceIndice.lastIndexOf("]");
-        let objectlink =
-        {
-          link: listLinks[i],
-          href: ruta,
-          text: data.substring(indiceApertura, indicecierre)
-        }
-        objectlinks.push(objectlink)
-      }
-      console.log(objectlinks.href)
-      resolve(objectlinks)
-    })
-  })
-}
+//       let objectlinks = [];
+//       for (let i = 0; i < listLinks.length; i++) {
+//         let indice = data.indexOf(listLinks[i])
+//         let sliceIndice = data.substr(0, indice);
+//         let indiceApertura = sliceIndice.lastIndexOf("[") + 1;
+//         let indicecierre = sliceIndice.lastIndexOf("]");
+//         let objectlink =
+//         {
+//           link: listLinks[i],
+//           href: ruta,
+//           text: data.substring(indiceApertura, indicecierre)
+//         }
+//         objectlinks.push(objectlink)
+//       }
+//       console.log(objectlinks.href)
+//       resolve(objectlinks)
+//     })
+//   })
+// }
 
-let arrFinal = listFilesIntoDirectory(dirPath)
-const arrPromise = arrFinal.map(leerMD)
-Promise.all(arrPromise)
-.then(console.log)
+// let arrFinal = listFilesIntoDirectory(dirPath)
+// const arrPromise = arrFinal.map(leerMD)
+// Promise.all(arrPromise)
+// .then(console.log)
 

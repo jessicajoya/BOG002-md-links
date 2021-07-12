@@ -1,6 +1,7 @@
 const path = require('path');
-const fs = require('fs')
-const axios = require('axios');
+const fs = require('fs');
+
+
 
 const dirPath = path.resolve(__dirname); // encuentro el path actual
 console.log(dirPath)
@@ -16,7 +17,7 @@ const listFilesIntoDirectory = (inputpath, arr) => {
         listFilesIntoDirectory(element, arr)
       }
     } else if (element.includes('.md')) {
-      console.log(element)
+      // console.log(element)
       // extFileMD(element)
       arr.push(element)
     }
@@ -26,7 +27,8 @@ const listFilesIntoDirectory = (inputpath, arr) => {
 
 
 const createAPI = (inputlist,pathName,contentFile) =>{
-    let objectlinks = [];
+    let objectlinks = []
+  ;
     for (let i = 0; i < inputlist.length; i++) {
 
         let indice = contentFile.indexOf(inputlist[i])
@@ -45,7 +47,7 @@ const createAPI = (inputlist,pathName,contentFile) =>{
     return objectlinks;
 }
 
-////////////////Funcion para crear el objeto 
+// ////////////////Funcion para crear el objeto 
 
 const findLinks = (filesMD) => {
     let contentFile = fs.readFileSync(filesMD, 'utf-8')
@@ -57,19 +59,26 @@ const findLinks = (filesMD) => {
    return objetoAPI 
 }
 
-const arrayLinks = listFilesIntoDirectory(dirPath).flatMap(md => findLinks(md));
+
+const arrayFilesMd = listFilesIntoDirectory(dirPath)
+// console.log(arrayFilesMd)
+
+
+const arrayLinks= arrayFilesMd.map(md => findLinks(md));
 console.log(arrayLinks)
-console.log(findLinks())
 
 
 
-// const verificarStatus = (link)=>{
-//   axios
-//   .get(link)
-//   .then((response) => {
-//     console.log(response.status);
-//   })
-//   .catch((error) => {
-//     console.error('error');
-//   });
-// }
+
+// // const verificarStatus = (link)=>{
+// //   axios
+// //   .get(link)
+// //   .then((response) => {
+// //     console.log(response.status);
+// //   })
+// //   .catch((error) => {
+// //     console.error('error');
+// //   });
+// // }
+
+
