@@ -1,22 +1,21 @@
 const path = require('path');
 const fs = require('fs');
-
 const axios = require('axios');
 
-
-
-const dirPath = path.resolve(__dirname); // encuentro el path actual
-
+const dirPath = path.resolve(__dirname); 
 
 const extFileMD = (file) => { return path.extname(file).toLowerCase() === '.md' }
 
+let absolutePath = (inputpath) => (path.isAbsolute(inputpath) ? inputpath : path.resolve(inputpath));
+
+
 const listFilesIntoDirectory = (inputpath, arr) => {
     arr = arr || [];
+    
     fs.readdirSync(inputpath).map(element => {
         if (fs.lstatSync(path.resolve(inputpath, element)).isDirectory()) {
             if (!element.startsWith('.') && !element.includes('modules')) {
-                // console.log(path.resolve(element));
-                //basebath+por cada cambioadignarle las carpetas por capas
+              
                 listFilesIntoDirectory(path.resolve(element), arr)
             }
         } else if (fs.lstatSync(path.resolve(inputpath, element)).isFile()) {
@@ -55,11 +54,6 @@ const createAPI = (inputlist, pathName, contentFile) => {
     return objectlinks;
 }
 
-
-// const arrayFilesMd = listFilesIntoDirectory(dirPath)
-// const createarr_Elements = arrayFilesMd.flatMap(md =>findElements(md));
-
-
 const getAllData = (list_href) => { return Promise.all(list_href.map(statusLinks)); }
 
 
@@ -97,6 +91,5 @@ const statusLinks = (URL) => {
 }
 
 
-// getAllData(createarr_Elements).then(console.log).catch(console.log)
-module.exports={dirPath,listFilesIntoDirectory,findElements,getAllData }
-// module.exports={dirPath,listFilesIntoDirectory,findElements,statusLinks}
+
+module.exports={dirPath,absolutePath,listFilesIntoDirectory,findElements,getAllData }
