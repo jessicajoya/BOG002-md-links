@@ -1,12 +1,12 @@
 const path = require('path');
 const fs = require('fs');
-// const fetch = require("node-fetch");
+
 const axios = require('axios');
 
 
 
 const dirPath = path.resolve(__dirname); // encuentro el path actual
-// console.log(dirPath)
+
 
 const extFileMD = (file) => { return path.extname(file).toLowerCase() === '.md' }
 
@@ -15,7 +15,9 @@ const listFilesIntoDirectory = (inputpath, arr) => {
     fs.readdirSync(inputpath).map(element => {
         if (fs.lstatSync(path.resolve(inputpath, element)).isDirectory()) {
             if (!element.startsWith('.') && !element.includes('modules')) {
-                listFilesIntoDirectory(element, arr)
+                // console.log(path.resolve(element));
+                //basebath+por cada cambioadignarle las carpetas por capas
+                listFilesIntoDirectory(path.resolve(element), arr)
             }
         } else if (fs.lstatSync(path.resolve(inputpath, element)).isFile()) {
             arr.push(inputpath + '//' + element)
@@ -24,6 +26,13 @@ const listFilesIntoDirectory = (inputpath, arr) => {
     return arr.filter(extFileMD);
 }
 
+const findElements = (filesMD) => {
+    let contentFile = fs.readFileSync(filesMD, 'utf-8')
+    const expRegLinks = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
+    const listLinks = [...contentFile.match(expRegLinks)];//recorrerlo map retund listlinks.map(){retorno el objeto}
+    const objetoAPI = createAPI(listLinks, filesMD, contentFile)
+    return objetoAPI
+}
 
 const createAPI = (inputlist, pathName, contentFile) => {
     let objectlinks = []
@@ -46,39 +55,22 @@ const createAPI = (inputlist, pathName, contentFile) => {
     return objectlinks;
 }
 
-// ////////////////Funcion para crear el objeto 
 
-const findElemts = (filesMD) => {
-    let contentFile = fs.readFileSync(filesMD, 'utf-8')
-    const expRegLinks = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
-    const listLinks = [...contentFile.match(expRegLinks)];//recorrerlo map retund listlinks.map(){retorno el objeto}
-    const objetoAPI = createAPI(listLinks, filesMD, contentFile)
-    return objetoAPI
-}
+// const arrayFilesMd = listFilesIntoDirectory(dirPath)
+// const createarr_Elements = arrayFilesMd.flatMap(md =>findElements(md));
 
-
-const arrayFilesMd = listFilesIntoDirectory(dirPath)
-const createarr_Elements = arrayFilesMd.flatMap(md => findElemts(md));
-console.log(createarr_Elements)
-
-
-const URLs = (arr_Elements) => {
-    var list_href = [];
-    arr_Elements.forEach(function (e) {
-        list_href.push(e.link);
-    });
-    return (list_href)
-}
-const arr_URLs=URLs(createarr_Elements)
 
 const getAllData = (list_href) => { return Promise.all(list_href.map(statusLinks)); }
 
 
 const statusLinks = (URL) => {
     return axios
-        .get(URL)
+        .get(URL.link)
         .then(function (response) {
             return {
+                link: URL.link,
+                href: URL.href,
+                text: URL.text,
                 status: response.status,
                 statustext: response.statusText
             };
@@ -86,11 +78,17 @@ const statusLinks = (URL) => {
         .catch(function (error) {
             if (error.response) {
                 return {
+                    link: URL.link,
+                    href: URL.href,
+                    text: URL.text,
                     status: error.response.status,
                     statustext: "fail"
                 };
             } else {
                 return {
+                    link: URL.link,
+                    href: URL.href,
+                    text: URL.text,
                     status: "fail",
                     statustext: "fail"
                 }
@@ -98,7 +96,7 @@ const statusLinks = (URL) => {
         });
 }
 
-// getAllData(arr_URLs).then((createarr_Elements) => {
-//     return [].concat.apply([], createarr_Elements);
-// }).then(console.log);
-getAllData(arr_URLs).then(console.log).catch(console.log)
+
+// getAllData(createarr_Elements).then(console.log).catch(console.log)
+module.exports={dirPath,listFilesIntoDirectory,findElements,getAllData }
+// module.exports={dirPath,listFilesIntoDirectory,findElements,statusLinks}
