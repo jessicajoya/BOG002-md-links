@@ -1,12 +1,11 @@
 
-const {dirPath,absolutePath,listFilesIntoDirectory,findElements,getAllData } = require('./functions.js')
+const { dirPath, listFilesIntoDirectory, findElements, getAllData } = require('./functions.js')
 
 
 function mdlinks(inputpath, validate) {
     val = validate || false;
-   
-    const absolutepath = absolutePath(inputpath)
-    const arrayFilesMd = listFilesIntoDirectory(absolutepath);
+
+    const arrayFilesMd = listFilesIntoDirectory(inputpath);
     const createarrElements = arrayFilesMd.flatMap(md => findElements(md))
     if (!validate) {
         return (createarrElements)
@@ -16,6 +15,6 @@ function mdlinks(inputpath, validate) {
 
 }
 
-// module.exports={mdlinks}
-const MDlinks = mdlinks(dirPath)
-console.log(MDlinks)
+module.exports = { mdlinks }
+// const MDlinks = mdlinks(dirPath,false)
+// console.log(MDlinks)

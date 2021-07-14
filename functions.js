@@ -6,13 +6,12 @@ const dirPath = path.resolve(__dirname);
 
 const extFileMD = (file) => { return path.extname(file).toLowerCase() === '.md' }
 
-let absolutePath = (inputpath) => (path.isAbsolute(inputpath) ? inputpath : path.resolve(inputpath));
-
-
+//en este momento la funcion list files recibe un
 const listFilesIntoDirectory = (inputpath, arr) => {
     arr = arr || [];
-    
-    fs.readdirSync(inputpath).map(element => {
+    if (fs.statSync(inputpath).isFile()){
+       return [inputpath]
+    }else {fs.readdirSync(inputpath).map(element => {
         if (fs.lstatSync(path.resolve(inputpath, element)).isDirectory()) {
             if (!element.startsWith('.') && !element.includes('modules')) {
               
@@ -22,7 +21,7 @@ const listFilesIntoDirectory = (inputpath, arr) => {
             arr.push(inputpath + '//' + element)
         }
     });
-    return arr.filter(extFileMD);
+    return arr.filter(extFileMD);}
 }
 
 const findElements = (filesMD) => {
@@ -92,4 +91,4 @@ const statusLinks = (URL) => {
 
 
 
-module.exports={dirPath,absolutePath,listFilesIntoDirectory,findElements,getAllData }
+module.exports={dirPath,listFilesIntoDirectory,findElements,getAllData }
