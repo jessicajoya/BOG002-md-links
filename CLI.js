@@ -11,7 +11,8 @@ const path = args[0];
 if(argv.validate ){
     let objMDtrue = initMdLinks.mdlinks(path,true);
     console.log(objMDtrue)
-}else if (argv.stats) {
+}
+else if (argv.stats) {
     let objMD = initMdLinks.mdlinks(path,false);
     const busquedalinks = objMD.reduce((acc, eleLink) => {
         acc[eleLink.link] = ++acc[eleLink.link] || 0;

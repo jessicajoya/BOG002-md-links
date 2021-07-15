@@ -16,5 +16,5 @@ function mdlinks(inputpath, validate) {
 }
 
 module.exports = { mdlinks }
-// const MDlinks = mdlinks(dirPath,false)
+// const MDlinks = mdlinks(dirPath,true)
 // console.log(MDlinks)
